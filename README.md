@@ -11,4 +11,5 @@ No Gaming/Physics Libraries/Frameworks used. All Custom Code and Custom Physics.
 
 ## About
 
-Game is about finding keys and opening gates.
+Game is about finding keys and opening gates. Each gate is coded with a color, and can be only opened by the key with same color.
+You have to find your way out from this mysterious dungeon. Help yourself with those awesome arrow keys on your keyboard.
