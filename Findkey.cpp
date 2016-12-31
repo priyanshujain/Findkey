@@ -12,10 +12,14 @@
 #define BG 23
 #define GG 24
 
-class Tile{
+class Point{
 public:
+    int x, y;
+};
+class Tile{
     bool visible;
     int type;
+public:
     Tile()
     {
         type = 1;
@@ -26,8 +30,24 @@ public:
         type = t;
         visible = true;
     }
+    int getType() {
+        return type;
+    }
+    void setType(int _type) {
+        type = _type;
+    }
+    bool isVisible(){
+      return visible;
+    }
+    void setVisible(bool trig){
+      visible = trig;
+    }
 };
-
+class Key{
+public:
+    Point pos;
+    int color;
+};
 Tile matrix[100][100];
 int pi = 0, pj = 0;
 int key;
@@ -41,18 +61,17 @@ void initialize()
                         {0, 1, 0 , 0, 1, 0, 1, 0, 1, 0},
                         {0, 1, 0 , 0, 1, 0, 1, 0, 1, 0},
                         {0, 1, 0 , 0, 1, 0, 1, 0, 1, 0},
-                        {0, 1, 0 , 0, 1, 0, 1, 0, 1, 0},
+                        {0, 1, 0 , 0, BK, 0, 1, 0, 1, 0},
                         {0, 1, 0 , 0, 0, 0, 1, 0, 1, 0},
-                        {0, 1, 1 , 1, 1, 1, 1, 0, 1, 1}};
+                        {0, 1, 1 , BG, 1, 1, 1, 0, 1, 1}};
 
-    for(int i = 0; i < 10; i++)
-        for(int j = 0; j < 10; j++)
-        {
+    for(int i = 0; i < 10; i++) {
+        for(int j = 0; j < 10; j++) {
             matrix[i][j].create(mat[i][j]);
         }
+    }
 }
-void draw()
-{
+void draw() {
     for(int i = 0; i < 10; i++)
     {
         for(int j = 0; j < 10; j++)
@@ -61,7 +80,7 @@ void draw()
                 mvprintw(pi*2,pj*2," *");
             else
             {
-                switch(matrix[i][j].type)
+                switch(matrix[i][j].getType())
                 {
                     case WALL:mvprintw(i*2,j*2," #");
                     break;
@@ -129,7 +148,7 @@ int update()
           //cout << endl << "Up" << endl;//key up
           if(pi > 0)
           {
-            switch(matrix[pi-1][pj].type)
+            switch(matrix[pi-1][pj].getType())
             {
               case PATH:
               mvprintw(pi*2,pj*2,"  ");
@@ -155,7 +174,7 @@ int update()
                 {
                   mvprintw(pi*2,pj*2,"  ");
                     pi--;
-                    matrix[pi][pj].type = PATH;
+                    matrix[pi][pj].setType(PATH);
                     key = NONE;
                 }
                 break;
@@ -164,7 +183,7 @@ int update()
                 {
                   mvprintw(pi*2,pj*2,"  ");
                     pi--;
-                    matrix[pi][pj].type = PATH;
+                    matrix[pi][pj].setType(PATH);
                     key = NONE;
                 }
                 break;
@@ -173,7 +192,7 @@ int update()
                 {
                   mvprintw(pi*2,pj*2,"  ");
                     pi--;
-                    matrix[pi][pj].type = PATH;
+                    matrix[pi][pj].setType(PATH);
                     key = NONE;
                 }
                 break;
@@ -184,7 +203,7 @@ int update()
           //cout << endl << "Down" << endl;   // key down
           if(pi < 9)
           {
-            switch(matrix[pi+1][pj].type)
+            switch(matrix[pi+1][pj].getType())
             {
               case PATH:
               mvprintw(pi*2,pj*2,"  ");
@@ -210,7 +229,7 @@ int update()
                 {
                   mvprintw(pi*2,pj*2,"  ");
                     pi++;
-                    matrix[pi][pj].type = PATH;
+                    matrix[pi][pj].setType(PATH);
                     key = NONE;
                 }
                 break;
@@ -219,7 +238,7 @@ int update()
                 {
                   mvprintw(pi*2,pj*2,"  ");
                     pi++;
-                    matrix[pi][pj].type = PATH;
+                    matrix[pi][pj].setType(PATH);
                     key = NONE;
                 }
                 break;
@@ -228,7 +247,7 @@ int update()
                 {
                   mvprintw(pi*2,pj*2,"  ");
                     pi++;
-                    matrix[pi][pj].type = PATH;
+                    matrix[pi][pj].setType(PATH);
                     key = NONE;
                 }
                 break;
@@ -239,7 +258,7 @@ int update()
           //cout << endl << "Left" << endl;  // key left
           if(pj > 0)
           {
-            switch(matrix[pi][pj-1].type)
+            switch(matrix[pi][pj-1].getType())
             {
               case PATH:
               mvprintw(pi*2,pj*2,"  ");
@@ -265,7 +284,7 @@ int update()
                 {
                   mvprintw(pi*2,pj*2,"  ");
                     pj--;
-                    matrix[pi][pj].type = PATH;
+                    matrix[pi][pj].setType(PATH);
                     key = NONE;
                 }
                 break;
@@ -274,7 +293,7 @@ int update()
                 {
                   mvprintw(pi*2,pj*2,"  ");
                     pj--;
-                    matrix[pi][pj].type = PATH;
+                    matrix[pi][pj].setType(PATH);
                     key = NONE;
                 }
                 break;
@@ -283,7 +302,7 @@ int update()
                 {
                   mvprintw(pi*2,pj*2,"  ");
                     pj--;
-                    matrix[pi][pj].type = PATH;
+                    matrix[pi][pj].setType(PATH);
                     key = NONE;
                 }
                 break;
@@ -294,7 +313,7 @@ int update()
           //cout << endl << "Right" << endl;  // key right
           if(pj < 9)
           {
-            switch(matrix[pi][pj+1].type)
+            switch(matrix[pi][pj+1].getType())
             {
               case PATH:
               mvprintw(pi*2,pj*2,"  ");
@@ -320,7 +339,7 @@ int update()
                 {
                   mvprintw(pi*2,pj*2,"  ");
                     pj++;
-                    matrix[pi][pj].type = PATH;
+                    matrix[pi][pj].setType(PATH);
                     key = NONE;
                 }
                 break;
@@ -329,7 +348,7 @@ int update()
                 {
                   mvprintw(pi*2,pj*2,"  ");
                     pj++;
-                    matrix[pi][pj].type = PATH;
+                    matrix[pi][pj].setType(PATH);
                     key = NONE;
                 }
                 break;
@@ -338,7 +357,7 @@ int update()
                 {
                   mvprintw(pi*2,pj*2,"  ");
                     pj++;
-                    matrix[pi][pj].type = PATH;
+                    matrix[pi][pj].setType(PATH);
                     key = NONE;
                 }
                 break;
@@ -348,9 +367,10 @@ int update()
       default:return 1;
           break;
   }
-  if(matrix[pi][pj].type == RK || matrix[pi][pj].type == BK || matrix[pi][pj].type == GK)
+  int t = matrix[pi][pj].getType();
+  if(t== RK || t == BK || t == GK)
   {
-      matrix[pi][pj].type = PATH;
+      matrix[pi][pj].setType(PATH);
   }
   attron(A_BOLD);
     mvprintw(pi*2,pj*2," *");
@@ -372,11 +392,15 @@ int main(){
   while(t == 0)
   {
     t = update();
-    mvprintw(40,40,"");
+    mvprintw(1, 50,"pi:%d pj:%d", pi, pj);
     refresh();
+    if(pi == 9 && pj == 9) {
+        break;
+    }
   }
   attron(A_BOLD);
-  mvprintw(30, 30, "GAME OVER!!!");
+  mvprintw(20, 20, "GAME OVER!!!");
+  refresh();
   attroff(A_BOLD);
   getch();
   end_curses();
